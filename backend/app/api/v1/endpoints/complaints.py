@@ -283,7 +283,7 @@ async def lodge_complaint_legacy(request: LegacyComplaintRequest):
             {
                 "complaint_id": next_id,
                 "epic": request.epic,
-                "issue_type": request.issue_type,
+                "type": request.issue_type,
                 "status": "Open",
                 "timestamp": timestamp,
                 "booth_id": booth_id,
@@ -330,9 +330,9 @@ async def resolve_complaint(doc_id: int):
         # ── Update Neo4j (primary) ──
         cypher = """
         MATCH (c:Complaint {complaint_id: $id})
-        SET i.status = 'Resolved',
-            i.resolved_at = $timestamp
-        RETURN i
+        SET c.status = 'Resolved',
+            c.resolved_at = $timestamp
+        RETURN c
         """
         result = neo4j_client.run_query(
             cypher, {"id": doc_id, "timestamp": timestamp}
