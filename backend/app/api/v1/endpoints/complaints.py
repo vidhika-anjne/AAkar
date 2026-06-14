@@ -330,9 +330,11 @@ async def resolve_complaint(doc_id: int):
         # ── Update Neo4j (primary) ──
         cypher = """
         MATCH (c:Complaint {complaint_id: $id})
-        SET c.status = 'Resolved',
-            c.resolved_at = $timestamp
-        RETURN c
+db-optimisation
+        SET i.status = 'Resolved',
+            i.resolved_at = $timestamp
+        RETURN i
+
         """
         result = neo4j_client.run_query(
             cypher, {"id": doc_id, "timestamp": timestamp}
