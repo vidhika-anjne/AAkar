@@ -25,7 +25,7 @@ export function AuthProvider({ children }) {
       .then((res) => {
         if (!res.ok) {
           localStorage.removeItem('praja_session');
-          throw new Error('Token expired');
+          return Promise.reject(new Error('Token expired'));
         }
         return res.json();
       })
