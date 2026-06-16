@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Network } from 'vis-network';
 import { DataSet } from 'vis-data';
 
-const API_BASE = 'http://localhost:8000/api/v1/admin';
+const API_BASE = '/api/v1/admin';
 
 // Custom government-themed palette for communities
 const COMMUNITY_COLORS = [
