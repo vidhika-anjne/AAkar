@@ -11,7 +11,8 @@ import MandalDashboard from '../../components/dashboards/MandalDashboard';
 import BoothDashboard from '../../components/dashboards/BoothDashboard';
 import VolunteerDashboard from '../../components/dashboards/VolunteerDashboard';
 
-import AICopilot from '../../components/AICopilot';
+import AICopilot from '../../components/shared/AICopilot';
+import ElectionAdminDashboard from '../../components/dashboards/ElectionAdminDashboard';
 
 export default function ElectionPage() {
   const { currentUser } = useAuth();
@@ -31,6 +32,8 @@ export default function ElectionPage() {
 
   const renderDashboard = () => {
     switch (userRole) {
+      case 'ELECTION_ADMIN':
+        return <ElectionAdminDashboard hierarchy={hierarchy} tab={activeTab} />;
       case 'STATE_ADMIN':
         return <StateDashboard hierarchy={hierarchy} tab={activeTab} />;
       case 'DISTRICT_ADMIN':
