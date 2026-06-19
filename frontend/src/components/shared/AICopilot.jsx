@@ -13,7 +13,7 @@ export default function AICopilot({ hierarchy }) {
     const [input, setInput] = useState('');
     const [isThinking, setIsThinking] = useState(false);
 
-    const handleSend = () => {
+    const handleSend = async () => {
         if (!input.trim()) return;
 
         const userText = input;
@@ -21,14 +21,40 @@ export default function AICopilot({ hierarchy }) {
         setInput('');
         setIsThinking(true);
 
-        setTimeout(() => {
+        try {
+            const res = await fetch('/api/v1/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question: userText,
+                    shortcut: null
+                }),
+            });
+
+            if (!res.ok) {
+                throw new Error(`Server error: ${res.status}`);
+            }
+
+            const data = await res.json();
+            
+            // Extract the answer or fallback to a default message
+            const aiResponse = data.answer || "I've analyzed the graph data for you.";
+            
             setIsThinking(false);
             setMessages(prev => [...prev, { 
                 id: Date.now() + 1, 
                 role: 'ai', 
-                text: "No data available to analyze. Please ensure the system is connected to a data source." 
+                text: aiResponse 
             }]);
-        }, 1500);
+        } catch (error) {
+            console.error("AI Copilot Error:", error);
+            setIsThinking(false);
+            setMessages(prev => [...prev, { 
+                id: Date.now() + 1, 
+                role: 'ai', 
+                text: "I'm having trouble connecting to the intelligence node. Please verify the backend service is running." 
+            }]);
+        }
     };
 
     return (
